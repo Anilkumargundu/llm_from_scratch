@@ -8,6 +8,11 @@ with open(r"/home/anilk/GIT/llm_from_scratch/data_set/the-verdict.txt", "r", enc
     vocabulary = {token:integer for integer, token in enumerate(all_words)} ## this creates a vocabulary means for each word in all_words, an integer is assisgned for each word in the all_words in the form of (word, index)
 
 
+#### adding two  special tokens (ubknown and end of the lsi token) to the pre_processed data to make all_tokens
+all_tokens = sorted(set(pre_processed))
+all_tokens.extend(["<|endoftext|>", "<|unk|>"])
+vocabulary = {token:integer for integer, token in enumerate(all_tokens)}
+
 ### this creates the class for the reading vocabular from data set and then encoding, decoding of the user specific text
 class SimpleTokenizerV1:
     def __init__(self, vocabulary):
@@ -17,31 +22,27 @@ class SimpleTokenizerV1:
     def encode (self, text):
         pre_processed = re.split(r'([,.:;?!()\-_"\']|\s)', text)     ### this tokenizes and makes and considers each word and the special characters shown as a token
         pre_processed = [item.strip() for item in pre_processed if item.strip()]
+        pre_processed = [item if item in self.str_to_int 
+                         else "<|unk|>" for item in pre_processed]
         ids = [self.str_to_int[s] for s in pre_processed]
         return ids
     
-
     def decode (self, ids):
         text = " ".join([self.int_to_str[i] for i in ids]) ## this replaces space befor the specified pnctuations
         text = re.sub(r'\s*([,.:;?!()"\'-])\s*', r'\1', text)
         return text
 
 
-#### adding two  special tokens (ubknown and end of the lsi token) to the pre_processed data to make all_tokens
-all_tokens = sorted(set(pre_processed))
-all_tokens.extend(["<|endoftext|>", "<|unk|>"])
-vocabulary = {token:integer for integer, token in enumerate(all_tokens)}
-print(len(vocabulary))
 
-
+#print(vocabulary)
 
 # Example usage of the tokenizer
-#tokengen = SimpleTokenizerV1(vocabulary)
+tokengen = SimpleTokenizerV1(vocabulary)
 
 # Encode a sample text
-#sample_text = "Hello, do you like tea?"
+sample_text = "Hello, do you like tea?"
 #sample_id = [56, 2, 858, 997, 605, 535, 750, 7]
-#encoded = tokengen.encode(sample_text)
+encoded = tokengen.encode(sample_text)
 #decoded = tokengen.decode(sample_id)
-#print("Encoded:", encoded)
+print("Encoded:", encoded)
 #print("Decoded:", decoded)
