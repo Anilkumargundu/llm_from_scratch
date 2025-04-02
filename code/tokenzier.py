@@ -40,9 +40,12 @@ class SimpleTokenizerV1:
 tokengen = SimpleTokenizerV1(vocabulary)
 
 # Encode a sample text
-sample_text = "Hello, do you like tea?"
+text1 = "Hello, do you like tea?"
+text2 = "In the sunlight terraces of the palace."
+text = "<|endoftext|>".join((text1, text2))
+print(text)
 #sample_id = [56, 2, 858, 997, 605, 535, 750, 7]
-encoded = tokengen.encode(sample_text)
+#encoded = tokengen.encode(sample_text)
 #decoded = tokengen.decode(sample_id)
-print("Encoded:", encoded)
+#print("Encoded:", encoded)
 #print("Decoded:", decoded)
