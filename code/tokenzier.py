@@ -8,12 +8,12 @@ with open(r"/home/anilk/GIT/llm_from_scratch/data_set/the-verdict.txt", "r", enc
     vocabulary = {token:integer for integer, token in enumerate(all_words)} ## this creates a vocabulary means for each word in all_words, an integer is assisgned for each word in the all_words in the form of (word, index)
 
 
-#### adding two  special tokens (ubknown and end of the lsi token) to the pre_processed data to make all_tokens
+#### adding two  special tokens (unknown and end of the list token) to the pre_processed data to make all_tokens
 all_tokens = sorted(set(pre_processed))
 all_tokens.extend(["<|endoftext|>", "<|unk|>"])
 vocabulary = {token:integer for integer, token in enumerate(all_tokens)}
 
-### this creates the class for the reading vocabular from data set and then encoding, decoding of the user specific text
+### this creates the class for the reading vocabulary from data set and then encoding, decoding of any user specific text
 class SimpleTokenizerV1:
     def __init__(self, vocabulary):
         self.str_to_int = vocabulary
@@ -28,7 +28,7 @@ class SimpleTokenizerV1:
         return ids
     
     def decode (self, ids):
-        text = " ".join([self.int_to_str[i] for i in ids]) ## this replaces space befor the specified pnctuations
+        text = " ".join([self.int_to_str[i] for i in ids]) ## this replaces space before the specified pnctuations
         text = re.sub(r'\s*([,.:;?!()"\'-])\s*', r'\1', text)
         return text
 
@@ -40,11 +40,15 @@ class SimpleTokenizerV1:
 tokengen = SimpleTokenizerV1(vocabulary)
 
 # Encode a sample text
-text1 = "Hello, do you like tea?"
-text2 = "In the sunlight terraces of the palace."
+text1 = "tea"
+text2 = "In"
 text = "<|endoftext|>".join((text1, text2))
-print(text)
-#sample_id = [56, 2, 858, 997, 605, 535, 750, 7]
+print("text :", text)
+encoded_text = tokengen.encode(text)
+print("encode_text :", encoded_text)
+decoded_text = tokengen.decode(encoded_text)
+print("decoded_text :",decoded_text)
+#print(vocabulary)
 #encoded = tokengen.encode(sample_text)
 #decoded = tokengen.decode(sample_id)
 #print("Encoded:", encoded)
