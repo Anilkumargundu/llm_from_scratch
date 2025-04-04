@@ -15,40 +15,11 @@ all_tokens = sorted(set(pre_processed))
 all_tokens.extend(["<|endoftext|>", "<|unk|>"])
 vocabulary = {token:integer for integer, token in enumerate(all_tokens)}
 
-### this creates the class for the reading vocabulary from data set and then encoding, decoding of any user specific text
-class SimpleTokenizerV1:
-    def __init__(self, vocabulary):
-        self.str_to_int = vocabulary
-        self.int_to_str = {i:s for s,i in vocabulary.items()} ## this is used for decoding purpose
-    
-    def encode (self, text):
-        pre_processed = re.split(r'([,.:;?!()\-_"\']|\s)', text)     ### this tokenizes and makes and considers each word and the special characters shown as a token
-        pre_processed = [item.strip() for item in pre_processed if item.strip()]
-        pre_processed = [item if item in self.str_to_int 
-                         else "<|unk|>" for item in pre_processed]
-        ids = [self.str_to_int[s] for s in pre_processed]
-        return ids
-    
-    def decode (self, ids):
-        text = " ".join([self.int_to_str[i] for i in ids]) ## this replaces space before the specified pnctuations
-        text = re.sub(r'([,.:;?!()\-_"\']|\s)', r'\1', text)
-        return text
-
-
-
-#print(vocabulary)
-
-# Example usage of the tokenizer
-tokengen = SimpleTokenizerV1(vocabulary)
-
-# Encode a sample text
+# sample text that is to be encoded from the dataset the_verdict.txt
 text1 = "tea"
 text2 = "In"
 text = " <|endoftext|> ".join((text1, text2)) ##space before and after <|endoftext|> otherwise this mixes with the last word a file1 and first word of file2
 print("text :", text)
-encoded_text = tokengen.encode(text)
-
-decoded_text = tokengen.decode(encoded_text)
 
 #print(vocabulary)
 
