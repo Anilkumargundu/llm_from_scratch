@@ -29,7 +29,7 @@ class SimpleTokenizerV1:
     
     def decode (self, ids):
         text = " ".join([self.int_to_str[i] for i in ids]) ## this replaces space before the specified pnctuations
-        text = re.sub(r'\s*([,.:;?!()"\'-])\s*', r'\1', text)
+        text = re.sub(r'([,.:;?!()\-_"\']|\s)', r'\1', text)
         return text
 
 
@@ -42,14 +42,10 @@ tokengen = SimpleTokenizerV1(vocabulary)
 # Encode a sample text
 text1 = "tea"
 text2 = "In"
-text = "<|endoftext|>".join((text1, text2))
+text = " <|endoftext|> ".join((text1, text2))
 print("text :", text)
 encoded_text = tokengen.encode(text)
 print("encode_text :", encoded_text)
 decoded_text = tokengen.decode(encoded_text)
 print("decoded_text :",decoded_text)
 #print(vocabulary)
-#encoded = tokengen.encode(sample_text)
-#decoded = tokengen.decode(sample_id)
-#print("Encoded:", encoded)
-#print("Decoded:", decoded)
