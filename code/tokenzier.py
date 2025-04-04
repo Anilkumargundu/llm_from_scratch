@@ -1,4 +1,6 @@
 import re
+import importlib
+import tiktoken
 with open(r"/home/anilk/GIT/llm_from_scratch/data_set/the-verdict.txt", "r", encoding="utf-8") as f:
     raw_text = f.read()
     pre_processed = re.split(r'([,.:;?!()\-_"\']|\s)', raw_text)     ### this tokenizes and makes and considers each word and the special characters shown as a token
@@ -42,10 +44,17 @@ tokengen = SimpleTokenizerV1(vocabulary)
 # Encode a sample text
 text1 = "tea"
 text2 = "In"
-text = " <|endoftext|> ".join((text1, text2))
+text = " <|endoftext|> ".join((text1, text2)) ##space before and after <|endoftext|> otherwise this mixes with the last word a file1 and first word of file2
 print("text :", text)
 encoded_text = tokengen.encode(text)
-print("encode_text :", encoded_text)
+
 decoded_text = tokengen.decode(encoded_text)
-print("decoded_text :",decoded_text)
+
 #print(vocabulary)
+
+##### initiating the tiktoken for byte pair encoding
+tokenizer = tiktoken.get_encoding ("gpt2")
+encoded_text = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
+decoded_text = tokenizer.decode(encoded_text)
+print("encode_text :", encoded_text)
+print("decoded_text :",decoded_text)
