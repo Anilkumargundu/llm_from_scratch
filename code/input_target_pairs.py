@@ -17,3 +17,4 @@ for i in range (1, context_size+1):
     desired = enc_sample[i]
     #print("context or present input is :", context, "------> predicted output:", desired)
     print(tokenizer.decode(context), "-------->", "------->", tokenizer.decode([desired]))
+    
